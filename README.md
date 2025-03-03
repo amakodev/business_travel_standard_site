@@ -52,3 +52,86 @@ export default tseslint.config({
   },
 })
 ```
+
+# Restro Travel Website
+
+A modern travel website for a South African travel agency specializing in Cape Town and surrounding areas.
+
+## Features
+
+- Responsive design for all device sizes
+- Modern UI with animations using Framer Motion
+- Styled with styled-components
+- React Router for navigation
+- Voice introduction for first-time visitors
+
+## Placeholder Images
+
+The website uses placeholder images from external services to demonstrate the layout and design. In a production environment, these would be replaced with actual images.
+
+### Image Utilities
+
+The project includes a comprehensive set of image utilities in `src/utils/imageUtils.ts`:
+
+- `getPlaceholderImage()`: Generates placeholder images using Picsum Photos
+- `getTextPlaceholder()`: Creates text-based placeholders with customizable colors
+- `getTravelPlaceholder()`: Specialized function for travel-themed images
+- `getPlaceholderCollection()`: Generates multiple placeholder images at once
+
+### Placeholder Components
+
+The `src/components/PlaceholderImage.tsx` file provides reusable components:
+
+- `PlaceholderImage`: Base component with customizable properties
+- `HeroPlaceholder`: Specialized for hero/banner images (1920x1080)
+- `CardPlaceholder`: Optimized for card displays (400x300)
+- `AvatarPlaceholder`: For profile/avatar images (150x150)
+- `GalleryPlaceholder`: For gallery displays (600x400)
+
+### Usage Example
+
+```jsx
+// Import the components
+import { CardPlaceholder, HeroPlaceholder } from '../components/PlaceholderImage';
+import { getPlaceholderCollection } from '../utils/imageUtils';
+
+// Generate a collection of images
+const destinationImages = getPlaceholderCollection(3, 600, 400, 'nature');
+
+// Use in your component
+<HeroPlaceholder category="travel" alt="Beautiful landscape" />
+
+<CardPlaceholder 
+  category="city" 
+  text="Cape Town" 
+  useTextOverlay={true}
+  bgColor="#1976D2"
+  alt="Cape Town"
+/>
+```
+
+## Getting Started
+
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Start the development server: `npm start`
+
+## Project Structure
+
+- `/src/components`: Reusable UI components
+- `/src/pages`: Page components
+- `/src/styles`: Theme and global styles
+- `/src/utils`: Utility functions
+- `/src/animations`: Animation definitions
+
+## Dependencies
+
+- React
+- React Router
+- Styled Components
+- Framer Motion
+- Web Speech API (for voice introduction)
+
+## License
+
+This project is licensed under the MIT License.

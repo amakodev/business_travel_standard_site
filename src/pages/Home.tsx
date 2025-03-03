@@ -4,6 +4,8 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import Container from '../components/Container';
 import Button from '../components/Button';
+import { HeroPlaceholder, CardPlaceholder, GalleryPlaceholder } from '../components/PlaceholderImage';
+import { getPlaceholderCollection } from '../utils/imageUtils';
 
 // Animation variants
 const fadeInUp = {
@@ -29,11 +31,30 @@ const staggerContainer = {
 };
 
 const Home: React.FC = () => {
+  // Generate placeholder images for destinations
+  const destinationImages = {
+    tableMountain: getPlaceholderCollection(1, 600, 400, 'mountain')[0],
+    winelands: getPlaceholderCollection(1, 600, 400, 'food')[0],
+    gardenRoute: getPlaceholderCollection(1, 600, 400, 'nature')[0],
+    beach: getPlaceholderCollection(1, 600, 400, 'beach')[0],
+    safari: getPlaceholderCollection(1, 600, 400, 'safari')[0]
+  };
+
+  // Generate placeholder images for testimonials
+  const testimonialAvatars = getPlaceholderCollection(3, 80, 80, 'people');
+
   return (
     <PageWrapper>
       {/* Hero Section */}
       <HeroSection>
         <HeroOverlay />
+        <HeroImageContainer>
+          <HeroPlaceholder 
+            category="travel" 
+            alt="South African travel experience"
+            animate={false}
+          />
+        </HeroImageContainer>
         <Container>
           <HeroContent
             initial="hidden"
@@ -173,7 +194,7 @@ const Home: React.FC = () => {
           >
             <DestinationCard variants={fadeInUp}>
               <DestinationImage>
-                <img src="/src/assets/images/table-mountain.jpg" alt="Table Mountain" />
+                <img src={destinationImages.tableMountain} alt="Table Mountain" />
                 <DestinationOverlay />
               </DestinationImage>
               <DestinationContent>
@@ -190,7 +211,7 @@ const Home: React.FC = () => {
             
             <DestinationCard variants={fadeInUp}>
               <DestinationImage>
-                <img src="/src/assets/images/cape-winelands.jpg" alt="Cape Winelands" />
+                <img src={destinationImages.winelands} alt="Cape Winelands" />
                 <DestinationOverlay />
               </DestinationImage>
               <DestinationContent>
@@ -207,7 +228,7 @@ const Home: React.FC = () => {
             
             <DestinationCard variants={fadeInUp}>
               <DestinationImage>
-                <img src="/src/assets/images/garden-route.jpg" alt="Garden Route" />
+                <img src={destinationImages.gardenRoute} alt="Garden Route" />
                 <DestinationOverlay />
               </DestinationImage>
               <DestinationContent>
@@ -253,33 +274,54 @@ const Home: React.FC = () => {
             variants={staggerContainer}
           >
             <TestimonialCard variants={fadeInUp}>
-              <TestimonialQuote>
-                "Our trip to Cape Town was absolutely amazing! Restro Travel took care of everything from flights to accommodations. The Table Mountain tour was breathtaking and our guide was very knowledgeable."
-              </TestimonialQuote>
-              <TestimonialAuthor>
-                <TestimonialAuthorName>Michael Johnson</TestimonialAuthorName>
-                <TestimonialAuthorLocation>London, UK</TestimonialAuthorLocation>
-              </TestimonialAuthor>
+              <TestimonialContent>
+                <TestimonialQuote>
+                  "Our trip to Cape Town was absolutely amazing! The team at Restro Travel took care of every detail, from flights to accommodations and tours. We couldn't have asked for a better experience."
+                </TestimonialQuote>
+                <TestimonialAuthor>
+                  <TestimonialAvatar>
+                    <img src={testimonialAvatars[0]} alt="Sarah Johnson" />
+                  </TestimonialAvatar>
+                  <TestimonialInfo>
+                    <TestimonialName>Sarah Johnson</TestimonialName>
+                    <TestimonialTrip>Cape Town Explorer Package</TestimonialTrip>
+                  </TestimonialInfo>
+                </TestimonialAuthor>
+              </TestimonialContent>
             </TestimonialCard>
             
             <TestimonialCard variants={fadeInUp}>
-              <TestimonialQuote>
-                "The wine tour arranged by Restro Travel was the highlight of our trip. We visited three beautiful vineyards in Stellenbosch and had an amazing experience. Highly recommend their services!"
-              </TestimonialQuote>
-              <TestimonialAuthor>
-                <TestimonialAuthorName>Sarah Williams</TestimonialAuthorName>
-                <TestimonialAuthorLocation>New York, USA</TestimonialAuthorLocation>
-              </TestimonialAuthor>
+              <TestimonialContent>
+                <TestimonialQuote>
+                  "The safari experience was beyond our expectations. Our guide was knowledgeable and passionate, and we saw all of the Big Five! I highly recommend Restro Travel for anyone looking to explore South Africa."
+                </TestimonialQuote>
+                <TestimonialAuthor>
+                  <TestimonialAvatar>
+                    <img src={testimonialAvatars[1]} alt="Michael Thompson" />
+                  </TestimonialAvatar>
+                  <TestimonialInfo>
+                    <TestimonialName>Michael Thompson</TestimonialName>
+                    <TestimonialTrip>Luxury Safari Adventure</TestimonialTrip>
+                  </TestimonialInfo>
+                </TestimonialAuthor>
+              </TestimonialContent>
             </TestimonialCard>
             
             <TestimonialCard variants={fadeInUp}>
-              <TestimonialQuote>
-                "From the moment we arrived in Cape Town, everything was perfectly organized. The accommodations were excellent, and the safari experience was unforgettable. Thank you Restro Travel!"
-              </TestimonialQuote>
-              <TestimonialAuthor>
-                <TestimonialAuthorName>David Chen</TestimonialAuthorName>
-                <TestimonialAuthorLocation>Singapore</TestimonialAuthorLocation>
-              </TestimonialAuthor>
+              <TestimonialContent>
+                <TestimonialQuote>
+                  "We loved our Garden Route journey! The accommodations were perfect, and the itinerary allowed us to see so many beautiful places. The team was responsive and helpful throughout our entire trip."
+                </TestimonialQuote>
+                <TestimonialAuthor>
+                  <TestimonialAvatar>
+                    <img src={testimonialAvatars[2]} alt="Emily and David Chen" />
+                  </TestimonialAvatar>
+                  <TestimonialInfo>
+                    <TestimonialName>Emily and David Chen</TestimonialName>
+                    <TestimonialTrip>Garden Route Journey</TestimonialTrip>
+                  </TestimonialInfo>
+                </TestimonialAuthor>
+              </TestimonialContent>
             </TestimonialCard>
           </TestimonialsGrid>
         </Container>
@@ -342,6 +384,21 @@ const HeroOverlay = styled.div`
   right: 0;
   bottom: 0;
   background: linear-gradient(to right, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3));
+`;
+
+const HeroImageContainer = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 `;
 
 const HeroContent = styled(motion.div)`
@@ -601,6 +658,11 @@ const TestimonialCard = styled(motion.div)`
   border-top: 4px solid ${({ theme }) => theme.colors.primary};
 `;
 
+const TestimonialContent = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 const TestimonialQuote = styled.blockquote`
   font-size: ${({ theme }) => theme.fontSizes.md};
   color: ${({ theme }) => theme.colors.black};
@@ -623,12 +685,31 @@ const TestimonialAuthor = styled.div`
   flex-direction: column;
 `;
 
-const TestimonialAuthorName = styled.div`
+const TestimonialAvatar = styled.div`
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: ${({ theme }) => theme.spacing.md};
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+`;
+
+const TestimonialInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const TestimonialName = styled.div`
   font-weight: 600;
   color: ${({ theme }) => theme.colors.black};
 `;
 
-const TestimonialAuthorLocation = styled.div`
+const TestimonialTrip = styled.div`
   color: ${({ theme }) => theme.colors.darkGray};
   font-size: ${({ theme }) => theme.fontSizes.sm};
 `;

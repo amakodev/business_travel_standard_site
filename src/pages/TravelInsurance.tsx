@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import Container from '../components/Container';
 import Button from '../components/Button';
 import { fadeIn, fadeInUp, staggerContainer } from '../animations/transitions';
+import { HeroPlaceholder, CardPlaceholder } from '../components/PlaceholderImage';
+import { getTravelPlaceholder } from '../utils/imageUtils';
 
 const TravelInsurance: React.FC = () => {
   return (
@@ -12,6 +14,13 @@ const TravelInsurance: React.FC = () => {
       {/* Hero Section */}
       <HeroSection>
         <HeroOverlay />
+        <HeroImageContainer>
+          <HeroPlaceholder 
+            category="travel" 
+            alt="Travel insurance protection"
+            animate={false}
+          />
+        </HeroImageContainer>
         <Container>
           <HeroContent
             initial="hidden"
@@ -51,6 +60,15 @@ const TravelInsurance: React.FC = () => {
             
             <PlanGrid>
               <PlanCard variants={fadeInUp}>
+                <PlanImageWrapper>
+                  <CardPlaceholder 
+                    category="travel" 
+                    text="Standard Coverage" 
+                    useTextOverlay={true}
+                    bgColor="#1976D2"
+                    alt="Standard coverage plan"
+                  />
+                </PlanImageWrapper>
                 <PlanBadge>Most Popular</PlanBadge>
                 <PlanType>Standard Coverage</PlanType>
                 <PlanPrice>R350<span>/person</span></PlanPrice>
@@ -67,6 +85,15 @@ const TravelInsurance: React.FC = () => {
               </PlanCard>
 
               <PlanCard variants={fadeInUp}>
+                <PlanImageWrapper>
+                  <CardPlaceholder 
+                    category="travel" 
+                    text="Premium Coverage" 
+                    useTextOverlay={true}
+                    bgColor="#2E7D32"
+                    alt="Premium coverage plan"
+                  />
+                </PlanImageWrapper>
                 <PlanType>Premium Coverage</PlanType>
                 <PlanPrice>R650<span>/person</span></PlanPrice>
                 <PlanFeatures>
@@ -84,6 +111,15 @@ const TravelInsurance: React.FC = () => {
               </PlanCard>
 
               <PlanCard variants={fadeInUp}>
+                <PlanImageWrapper>
+                  <CardPlaceholder 
+                    category="travel" 
+                    text="Family Coverage" 
+                    useTextOverlay={true}
+                    bgColor="#C2185B"
+                    alt="Family coverage plan"
+                  />
+                </PlanImageWrapper>
                 <PlanType>Family Coverage</PlanType>
                 <PlanPrice>R1,200<span>/family</span></PlanPrice>
                 <PlanFeatures>
@@ -274,6 +310,21 @@ const HeroOverlay = styled.div`
   right: 0;
   bottom: 0;
   background: linear-gradient(to right, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.4));
+`;
+
+const HeroImageContainer = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 `;
 
 const HeroContent = styled(motion.div)`
@@ -526,6 +577,12 @@ const CTAButtonGroup = styled(motion.div)`
   @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
     flex-direction: row;
   }
+`;
+
+const PlanImageWrapper = styled.div`
+  margin-bottom: ${({ theme }) => theme.spacing.md};
+  border-radius: ${({ theme }) => theme.borderRadius.md} ${({ theme }) => theme.borderRadius.md} 0 0;
+  overflow: hidden;
 `;
 
 export default TravelInsurance; 

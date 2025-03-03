@@ -5,13 +5,31 @@ import { Link } from 'react-router-dom';
 import Container from '../components/Container';
 import Button from '../components/Button';
 import { fadeIn, fadeInUp, staggerContainer } from '../animations/transitions';
+import { HeroPlaceholder, CardPlaceholder, GalleryPlaceholder } from '../components/PlaceholderImage';
+import { getPlaceholderCollection } from '../utils/imageUtils';
 
 const Packages: React.FC = () => {
+  // Generate placeholder images for different package types
+  const packageImages = {
+    capeTown: getPlaceholderCollection(1, 600, 400, 'city')[0],
+    safari: getPlaceholderCollection(1, 600, 400, 'safari')[0],
+    gardenRoute: getPlaceholderCollection(1, 600, 400, 'nature')[0],
+    winelands: getPlaceholderCollection(1, 600, 400, 'food')[0],
+    beach: getPlaceholderCollection(1, 600, 400, 'beach')[0]
+  };
+
   return (
     <PageWrapper>
       {/* Hero Section */}
       <HeroSection>
         <HeroOverlay />
+        <HeroImageContainer>
+          <HeroPlaceholder 
+            category="travel" 
+            alt="South African travel packages"
+            animate={false}
+          />
+        </HeroImageContainer>
         <Container>
           <HeroContent
             initial="hidden"
@@ -52,7 +70,7 @@ const Packages: React.FC = () => {
             <PackageGrid>
               <PackageCard variants={fadeInUp}>
                 <PackageThumbnail>
-                  <img src="/src/assets/images/cape-town-package.jpg" alt="Cape Town Explorer" />
+                  <img src={packageImages.capeTown} alt="Cape Town Explorer" />
                   <PackageDuration>7 Days</PackageDuration>
                 </PackageThumbnail>
                 <PackageContent>
@@ -79,7 +97,7 @@ const Packages: React.FC = () => {
 
               <PackageCard variants={fadeInUp}>
                 <PackageThumbnail>
-                  <img src="/src/assets/images/safari-package.jpg" alt="Luxury Safari Adventure" />
+                  <img src={packageImages.safari} alt="Luxury Safari Adventure" />
                   <PackageDuration>5 Days</PackageDuration>
                 </PackageThumbnail>
                 <PackageContent>
@@ -106,7 +124,7 @@ const Packages: React.FC = () => {
 
               <PackageCard variants={fadeInUp}>
                 <PackageThumbnail>
-                  <img src="/src/assets/images/garden-route-package.jpg" alt="Garden Route Journey" />
+                  <img src={packageImages.gardenRoute} alt="Garden Route Journey" />
                   <PackageDuration>10 Days</PackageDuration>
                 </PackageThumbnail>
                 <PackageContent>
@@ -155,7 +173,7 @@ const Packages: React.FC = () => {
               <DealCard variants={fadeInUp}>
                 <DealBadge>Save 15%</DealBadge>
                 <DealImage>
-                  <img src="/src/assets/images/winelands-tour.jpg" alt="Cape Winelands Tour" />
+                  <img src={packageImages.winelands} alt="Cape Winelands Tour" />
                 </DealImage>
                 <DealContent>
                   <DealTitle>Cape Winelands Tour</DealTitle>
@@ -176,7 +194,7 @@ const Packages: React.FC = () => {
               <DealCard variants={fadeInUp}>
                 <DealBadge>Family Special</DealBadge>
                 <DealImage>
-                  <img src="/src/assets/images/family-beach.jpg" alt="Family Beach Holiday" />
+                  <img src={packageImages.beach} alt="Family Beach Holiday" />
                 </DealImage>
                 <DealContent>
                   <DealTitle>Family Beach Holiday</DealTitle>
@@ -256,41 +274,15 @@ const Packages: React.FC = () => {
                     <path fill="currentColor" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
                   </svg>
                 </BenefitIcon>
-                <BenefitTitle>Curated Itineraries</BenefitTitle>
+                <BenefitTitle>Handpicked Locations</BenefitTitle>
                 <BenefitDescription>
-                  Each package offers the perfect balance of must-see attractions and free time to explore on your own.
+                  Every destination in our packages has been personally visited and vetted by our travel experts.
                 </BenefitDescription>
               </BenefitItem>
             </BenefitsGrid>
           </SectionContent>
         </Container>
       </BenefitsSection>
-
-      {/* Custom Package Section */}
-      <CustomPackageSection>
-        <Container>
-          <CustomPackageContent
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-          >
-            <motion.div variants={fadeInUp}>
-              <CustomPackageTitle>Looking for Something Different?</CustomPackageTitle>
-            </motion.div>
-            <motion.div variants={fadeInUp}>
-              <CustomPackageDescription>
-                We can create a tailor-made South African experience just for you. Tell us your interests, budget, and time frame, and our travel experts will design your dream vacation.
-              </CustomPackageDescription>
-            </motion.div>
-            <CustomPackageButton variants={fadeInUp}>
-              <Button as={Link} to="/contact" variant="secondary" size="large">
-                Request Custom Package
-              </Button>
-            </CustomPackageButton>
-          </CustomPackageContent>
-        </Container>
-      </CustomPackageSection>
 
       {/* CTA Section */}
       <CTASection>
@@ -302,19 +294,19 @@ const Packages: React.FC = () => {
             variants={staggerContainer}
           >
             <motion.div variants={fadeInUp}>
-              <CTATitle>Ready to Experience South Africa?</CTATitle>
+              <CTATitle>Ready for Your South African Adventure?</CTATitle>
             </motion.div>
             <motion.div variants={fadeInUp}>
               <CTADescription>
-                Book your adventure today or contact us to learn more about our packages.
+                Contact our travel specialists to customize any package to your preferences and schedule.
               </CTADescription>
             </motion.div>
             <CTAButtonGroup variants={fadeInUp}>
               <Button as={Link} to="/contact" variant="primary" size="large">
-                Book Now
+                Start Planning
               </Button>
               <Button as={Link} to="/insurance" variant="outline" size="large">
-                View Travel Insurance
+                Explore Insurance Options
               </Button>
             </CTAButtonGroup>
           </CTAContent>
@@ -348,6 +340,21 @@ const HeroOverlay = styled.div`
   right: 0;
   bottom: 0;
   background: linear-gradient(to right, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.4));
+`;
+
+const HeroImageContainer = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 `;
 
 const HeroContent = styled(motion.div)`
@@ -400,12 +407,6 @@ const SpecialDealsSection = styled.section`
 const BenefitsSection = styled.section`
   padding: ${({ theme }) => `${theme.spacing['3xl']} 0`};
   background-color: ${({ theme }) => theme.colors.white};
-`;
-
-const CustomPackageSection = styled.section`
-  padding: ${({ theme }) => `${theme.spacing['2xl']} 0`};
-  background-color: ${({ theme }) => theme.colors.secondary};
-  color: ${({ theme }) => theme.colors.white};
 `;
 
 const CTASection = styled.section`
@@ -673,25 +674,6 @@ const BenefitTitle = styled.h3`
 const BenefitDescription = styled.p`
   color: ${({ theme }) => theme.colors.darkGray};
 `;
-
-const CustomPackageContent = styled(motion.div)`
-  text-align: center;
-  max-width: 800px;
-  margin: 0 auto;
-`;
-
-const CustomPackageTitle = styled.h2`
-  font-size: ${({ theme }) => theme.fontSizes['3xl']};
-  margin-bottom: ${({ theme }) => theme.spacing.md};
-`;
-
-const CustomPackageDescription = styled.p`
-  font-size: ${({ theme }) => theme.fontSizes.lg};
-  margin-bottom: ${({ theme }) => theme.spacing.xl};
-  opacity: 0.9;
-`;
-
-const CustomPackageButton = styled(motion.div)``;
 
 const CTAContent = styled(motion.div)`
   text-align: center;
