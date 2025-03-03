@@ -40,6 +40,9 @@ const Header: React.FC<HeaderProps> = ({ transparent = false }) => {
     setIsOpen(!isOpen);
   };
   
+  // Determine if we should use transparent styling
+  const useTransparentStyle = transparent && !scrolled;
+  
   return (
     <HeaderWrapper 
       transparent={transparent} 
@@ -51,37 +54,81 @@ const Header: React.FC<HeaderProps> = ({ transparent = false }) => {
       <Container>
         <NavContainer>
           <LogoContainer to="/">
-            <Logo>Restro<Accent>Travel</Accent></Logo>
+            <Logo $transparent={useTransparentStyle}>
+              Restro<Accent $transparent={useTransparentStyle}>Travel</Accent>
+            </Logo>
           </LogoContainer>
           
           <DesktopNav>
             <NavList>
               <NavItem>
-                <NavLink to="/" $isActive={location.pathname === '/'}>Home</NavLink>
+                <NavLink 
+                  to="/" 
+                  $isActive={location.pathname === '/'} 
+                  $transparent={useTransparentStyle}
+                >
+                  Home
+                </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink to="/about" $isActive={location.pathname === '/about'}>About</NavLink>
+                <NavLink 
+                  to="/about" 
+                  $isActive={location.pathname === '/about'} 
+                  $transparent={useTransparentStyle}
+                >
+                  About
+                </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink to="/services" $isActive={location.pathname === '/services'}>Services</NavLink>
+                <NavLink 
+                  to="/services" 
+                  $isActive={location.pathname === '/services'} 
+                  $transparent={useTransparentStyle}
+                >
+                  Services
+                </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink to="/team" $isActive={location.pathname === '/team'}>The Team</NavLink>
+                <NavLink 
+                  to="/team" 
+                  $isActive={location.pathname === '/team'} 
+                  $transparent={useTransparentStyle}
+                >
+                  The Team
+                </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink to="/promotions" $isActive={location.pathname === '/promotions'}>Promotions</NavLink>
+                <NavLink 
+                  to="/promotions" 
+                  $isActive={location.pathname === '/promotions'} 
+                  $transparent={useTransparentStyle}
+                >
+                  Promotions
+                </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink to="/insurance" $isActive={location.pathname === '/insurance'}>Travel Insurance</NavLink>
+                <NavLink 
+                  to="/insurance" 
+                  $isActive={location.pathname === '/insurance'} 
+                  $transparent={useTransparentStyle}
+                >
+                  Travel Insurance
+                </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink to="/packages" $isActive={location.pathname === '/packages'}>Packages</NavLink>
+                <NavLink 
+                  to="/packages" 
+                  $isActive={location.pathname === '/packages'} 
+                  $transparent={useTransparentStyle}
+                >
+                  Packages
+                </NavLink>
               </NavItem>
             </NavList>
           </DesktopNav>
           
-          <MenuButton onClick={toggleMenu} aria-label="Toggle menu">
-            <MenuIcon isOpen={isOpen}>
+          <MenuButton onClick={toggleMenu} aria-label="Toggle menu" $transparent={useTransparentStyle}>
+            <MenuIcon isOpen={isOpen} $transparent={useTransparentStyle}>
               <span></span>
               <span></span>
               <span></span>
@@ -89,7 +136,12 @@ const Header: React.FC<HeaderProps> = ({ transparent = false }) => {
           </MenuButton>
           
           <ContactButton>
-            <Button as={Link} to="mailto:info@restrotravel.co.za" variant="primary" size="small">
+            <Button 
+              as={Link} 
+              to="mailto:info@restrotravel.co.za" 
+              variant={useTransparentStyle ? "outline" : "primary"} 
+              size="small"
+            >
               Contact Us
             </Button>
           </ContactButton>
@@ -153,7 +205,11 @@ const HeaderWrapper = styled(motion.header)<HeaderWrapperProps>`
   right: 0;
   z-index: ${({ theme }) => theme.zIndex.fixed};
   background-color: ${({ transparent, scrolled, theme }) => 
-    transparent && !scrolled ? 'transparent' : theme.colors.white};
+    transparent && !scrolled ? 'rgba(0, 0, 0, 0.15)' : theme.colors.white};
+  backdrop-filter: ${({ transparent, scrolled }) => 
+    transparent && !scrolled ? 'blur(5px)' : 'none'};
+  -webkit-backdrop-filter: ${({ transparent, scrolled }) => 
+    transparent && !scrolled ? 'blur(5px)' : 'none'};
   box-shadow: ${({ transparent, scrolled, theme }) => 
     transparent && !scrolled ? 'none' : `0 2px 10px rgba(0, 0, 0, 0.1)`};
   transition: ${({ theme }) => theme.transition.normal};
@@ -174,15 +230,30 @@ const LogoContainer = styled(Link)`
   align-items: center;
 `;
 
-const Logo = styled.h1`
+interface LogoProps {
+  $transparent?: boolean;
+}
+
+const Logo = styled.h1<LogoProps>`
   font-size: ${({ theme }) => theme.fontSizes.xl};
   font-weight: 700;
   margin: 0;
-  color: ${({ theme }) => theme.colors.black};
+  color: ${({ $transparent, theme }) => 
+    $transparent ? theme.colors.white : theme.colors.black};
+  text-shadow: ${({ $transparent, theme }) => 
+    $transparent ? `0 1px 3px rgba(0, 0, 0, 0.3), 0 0 8px rgba(0, 0, 0, 0.2)` : 'none'};
+  transition: color 0.3s ease, text-shadow 0.3s ease;
 `;
 
-const Accent = styled.span`
+interface AccentProps {
+  $transparent?: boolean;
+}
+
+const Accent = styled.span<AccentProps>`
   color: ${({ theme }) => theme.colors.primary};
+  text-shadow: ${({ $transparent, theme }) => 
+    $transparent ? `0 1px 3px rgba(0, 0, 0, 0.3), 0 0 8px rgba(0, 0, 0, 0.2)` : 'none'};
+  transition: text-shadow 0.3s ease;
 `;
 
 const DesktopNav = styled.nav`
@@ -207,16 +278,21 @@ const NavItem = styled.li`
 
 interface NavLinkProps {
   $isActive: boolean;
+  $transparent?: boolean;
 }
 
 const NavLink = styled(Link)<NavLinkProps>`
   display: block;
   padding: ${({ theme }) => `${theme.spacing.xs} ${theme.spacing.sm}`};
-  color: ${({ $isActive, theme }) => 
-    $isActive ? theme.colors.primary : theme.colors.black};
-  font-weight: ${({ $isActive }) => ($isActive ? '600' : '400')};
+  color: ${({ $isActive, $transparent, theme }) => 
+    $isActive 
+      ? theme.colors.primary 
+      : ($transparent ? theme.colors.white : theme.colors.dark)};
+  font-weight: ${({ $isActive }) => ($isActive ? '600' : '500')};
   text-decoration: none;
   transition: ${({ theme }) => theme.transition.fast};
+  text-shadow: ${({ $transparent, theme }) => 
+    $transparent ? `0 1px 3px rgba(0, 0, 0, 0.3), 0 0 8px rgba(0, 0, 0, 0.2)` : 'none'};
   
   &::after {
     content: '';
@@ -239,7 +315,11 @@ const NavLink = styled(Link)<NavLinkProps>`
   }
 `;
 
-const MenuButton = styled.button`
+interface MenuButtonProps {
+  $transparent?: boolean;
+}
+
+const MenuButton = styled.button<MenuButtonProps>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -256,11 +336,12 @@ const MenuButton = styled.button`
 
 interface MenuIconProps {
   isOpen: boolean;
+  $transparent?: boolean;
 }
 
 const MenuIcon = styled.div<MenuIconProps>`
   width: 24px;
-  height: 16px;
+  height: 18px;
   position: relative;
   transform: rotate(0deg);
   transition: .5s ease-in-out;
@@ -270,27 +351,26 @@ const MenuIcon = styled.div<MenuIconProps>`
     position: absolute;
     height: 2px;
     width: 100%;
-    background: ${({ theme }) => theme.colors.primary};
-    border-radius: 9px;
+    background-color: ${({ $transparent, theme }) => 
+      $transparent ? theme.colors.white : theme.colors.black};
     opacity: 1;
     left: 0;
     transform: rotate(0deg);
     transition: .25s ease-in-out;
     
     &:nth-child(1) {
-      top: ${({ isOpen }) => (isOpen ? '7px' : '0px')};
-      transform: ${({ isOpen }) => (isOpen ? 'rotate(135deg)' : 'none')};
+      top: ${({ isOpen }) => isOpen ? '8px' : '0px'};
+      transform: ${({ isOpen }) => isOpen ? 'rotate(135deg)' : 'rotate(0)'};
     }
     
     &:nth-child(2) {
-      top: 7px;
-      opacity: ${({ isOpen }) => (isOpen ? '0' : '1')};
-      left: ${({ isOpen }) => (isOpen ? '-60px' : '0')};
+      top: 8px;
+      opacity: ${({ isOpen }) => isOpen ? '0' : '1'};
     }
     
     &:nth-child(3) {
-      top: ${({ isOpen }) => (isOpen ? '7px' : '14px')};
-      transform: ${({ isOpen }) => (isOpen ? 'rotate(-135deg)' : 'none')};
+      top: ${({ isOpen }) => isOpen ? '8px' : '16px'};
+      transform: ${({ isOpen }) => isOpen ? 'rotate(-135deg)' : 'rotate(0)'};
     }
   }
 `;
@@ -305,13 +385,16 @@ const ContactButton = styled.div`
 `;
 
 const MobileNav = styled(motion.nav)`
+  width: 100%;
   background-color: ${({ theme }) => theme.colors.white};
-  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   position: absolute;
   top: 80px;
   left: 0;
   right: 0;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: ${({ theme }) => theme.zIndex.fixed};
+  overflow: hidden;
+  border-top: 1px solid ${({ theme }) => theme.colors.lightGray};
   
   @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
     display: none;
@@ -333,14 +416,23 @@ const MobileNavItem = styled.li`
   }
 `;
 
-const MobileNavLink = styled(NavLink)`
+interface MobileNavLinkProps {
+  $isActive: boolean;
+}
+
+const MobileNavLink = styled(Link)<MobileNavLinkProps>`
   display: block;
-  padding: ${({ theme }) => theme.spacing.sm};
-  text-align: center;
-  font-size: ${({ theme }) => theme.fontSizes.lg};
+  padding: ${({ theme }) => theme.spacing.md};
+  color: ${({ $isActive, theme }) => 
+    $isActive ? theme.colors.primary : theme.colors.dark};
+  font-weight: ${({ $isActive }) => ($isActive ? '600' : '500')};
+  text-decoration: none;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.lightGray};
+  transition: ${({ theme }) => theme.transition.fast};
   
-  &::after {
-    display: none;
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.offWhite};
+    color: ${({ theme }) => theme.colors.primary};
   }
 `;
 
