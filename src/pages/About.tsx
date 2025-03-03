@@ -5,13 +5,25 @@ import { Link } from 'react-router-dom';
 import Container from '../components/Container';
 import Button from '../components/Button';
 import { fadeIn, fadeInUp, staggerContainer } from '../animations/transitions';
+import { HeroPlaceholder, CardPlaceholder, AvatarPlaceholder, GalleryPlaceholder } from '../components/PlaceholderImage';
+import { getPlaceholderCollection } from '../utils/imageUtils';
 
 const About: React.FC = () => {
+  // Generate placeholder images for team members
+  const teamAvatars = getPlaceholderCollection(4, 300, 400, 'people');
+
   return (
     <PageWrapper>
       {/* Hero Section */}
       <HeroSection>
         <HeroOverlay />
+        <HeroImageContainer>
+          <HeroPlaceholder 
+            category="travel" 
+            alt="About Restro Travel"
+            animate={false}
+          />
+        </HeroImageContainer>
         <Container>
           <HeroContent
             initial="hidden"
@@ -59,7 +71,10 @@ const About: React.FC = () => {
                 </p>
               </StoryContent>
               <StoryImage variants={fadeIn}>
-                <img src="/src/assets/images/about-team.jpg" alt="Restro Travel Team" />
+                <GalleryPlaceholder 
+                  category="travel" 
+                  alt="Restro Travel Team"
+                />
               </StoryImage>
             </StoryGrid>
           </SectionContent>
@@ -175,7 +190,10 @@ const About: React.FC = () => {
             <TeamGrid>
               <TeamMember variants={fadeInUp}>
                 <TeamMemberImage>
-                  <img src="/src/assets/images/team-member-1.jpg" alt="Sarah Johnson" />
+                  <AvatarPlaceholder 
+                    category="people" 
+                    alt="Sarah Johnson"
+                  />
                 </TeamMemberImage>
                 <TeamMemberInfo>
                   <TeamMemberName>Sarah Johnson</TeamMemberName>
@@ -188,7 +206,10 @@ const About: React.FC = () => {
               
               <TeamMember variants={fadeInUp}>
                 <TeamMemberImage>
-                  <img src="/src/assets/images/team-member-2.jpg" alt="David Nkosi" />
+                  <AvatarPlaceholder 
+                    category="people" 
+                    alt="David Nkosi"
+                  />
                 </TeamMemberImage>
                 <TeamMemberInfo>
                   <TeamMemberName>David Nkosi</TeamMemberName>
@@ -201,7 +222,10 @@ const About: React.FC = () => {
               
               <TeamMember variants={fadeInUp}>
                 <TeamMemberImage>
-                  <img src="/src/assets/images/team-member-3.jpg" alt="Maria Patel" />
+                  <AvatarPlaceholder 
+                    category="people" 
+                    alt="Maria Patel"
+                  />
                 </TeamMemberImage>
                 <TeamMemberInfo>
                   <TeamMemberName>Maria Patel</TeamMemberName>
@@ -214,7 +238,10 @@ const About: React.FC = () => {
               
               <TeamMember variants={fadeInUp}>
                 <TeamMemberImage>
-                  <img src="/src/assets/images/team-member-4.jpg" alt="James Williams" />
+                  <AvatarPlaceholder 
+                    category="people" 
+                    alt="James Williams"
+                  />
                 </TeamMemberImage>
                 <TeamMemberInfo>
                   <TeamMemberName>James Williams</TeamMemberName>
@@ -263,28 +290,38 @@ const About: React.FC = () => {
 
 // Styled Components
 const PageWrapper = styled.div`
-  overflow-x: hidden;
+  width: 100%;
 `;
 
 const HeroSection = styled.section`
+  width: 100%;
   height: 60vh;
   min-height: 400px;
-  background-image: url('/src/assets/images/about-hero.jpg');
-  background-size: cover;
-  background-position: center;
   position: relative;
   display: flex;
   align-items: center;
-  color: ${({ theme }) => theme.colors.white};
+  color: ${props => props.theme.colors.white};
+  margin-bottom: 4rem;
+  overflow: hidden;
+`;
+
+const HeroImageContainer = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
 `;
 
 const HeroOverlay = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(to right, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.4));
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7));
+  z-index: -1;
 `;
 
 const HeroContent = styled(motion.div)`

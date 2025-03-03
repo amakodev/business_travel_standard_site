@@ -6,9 +6,16 @@ import Container from '../components/Container';
 import Button from '../components/Button';
 import { fadeIn, fadeInUp, staggerContainer } from '../animations/transitions';
 import { HeroPlaceholder, CardPlaceholder } from '../components/PlaceholderImage';
-import { getTravelPlaceholder } from '../utils/imageUtils';
+import { getAfricanTravelPlaceholder } from '../utils/imageUtils';
 
 const TravelInsurance: React.FC = () => {
+  // Get specific African-themed images for insurance cards
+  const insuranceImages = {
+    standard: getAfricanTravelPlaceholder(400, 300, 'city'),
+    premium: getAfricanTravelPlaceholder(400, 300, 'safari'),
+    family: getAfricanTravelPlaceholder(400, 300, 'beach')
+  };
+
   return (
     <PageWrapper>
       {/* Hero Section */}
@@ -61,13 +68,7 @@ const TravelInsurance: React.FC = () => {
             <PlanGrid>
               <PlanCard variants={fadeInUp}>
                 <PlanImageWrapper>
-                  <CardPlaceholder 
-                    category="travel" 
-                    text="Standard Coverage" 
-                    useTextOverlay={true}
-                    bgColor="#1976D2"
-                    alt="Standard coverage plan"
-                  />
+                  <img src={insuranceImages.standard} alt="Standard coverage plan" />
                 </PlanImageWrapper>
                 <PlanBadge>Most Popular</PlanBadge>
                 <PlanType>Standard Coverage</PlanType>
@@ -86,13 +87,7 @@ const TravelInsurance: React.FC = () => {
 
               <PlanCard variants={fadeInUp}>
                 <PlanImageWrapper>
-                  <CardPlaceholder 
-                    category="travel" 
-                    text="Premium Coverage" 
-                    useTextOverlay={true}
-                    bgColor="#2E7D32"
-                    alt="Premium coverage plan"
-                  />
+                  <img src={insuranceImages.premium} alt="Premium coverage plan" />
                 </PlanImageWrapper>
                 <PlanType>Premium Coverage</PlanType>
                 <PlanPrice>R650<span>/person</span></PlanPrice>
@@ -112,13 +107,7 @@ const TravelInsurance: React.FC = () => {
 
               <PlanCard variants={fadeInUp}>
                 <PlanImageWrapper>
-                  <CardPlaceholder 
-                    category="travel" 
-                    text="Family Coverage" 
-                    useTextOverlay={true}
-                    bgColor="#C2185B"
-                    alt="Family coverage plan"
-                  />
+                  <img src={insuranceImages.family} alt="Family coverage plan" />
                 </PlanImageWrapper>
                 <PlanType>Family Coverage</PlanType>
                 <PlanPrice>R1,200<span>/family</span></PlanPrice>

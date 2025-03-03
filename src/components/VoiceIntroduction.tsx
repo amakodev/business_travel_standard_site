@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, memo, useCallback } from 'react';
 import styled from 'styled-components';
 
 const welcomeMessage = `
@@ -16,16 +16,20 @@ Let's make your South African adventure unforgettable! Enjoy browsing our site!
 `;
 
 const VoiceIntroduction: React.FC = () => {
-  const [hasPlayed, setHasPlayed] = useState<boolean>(false);
+  const [hasPlayed, setHasPlayed] = useState<boolean>(() => 
+    sessionStorage.getItem('introPlayed') === 'true'
+  );
   const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
   const [autoplayFailed, setAutoplayFailed] = useState<boolean>(false);
   const [autoplayAttempts, setAutoplayAttempts] = useState<number>(0);
+  const [isVisible, setIsVisible] = useState<boolean>(false);
   const autoplayTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const speechInstance = useRef<SpeechSynthesisUtterance | null>(null);
   
-  // Function to get available voices
-  const updateVoices = () => {
+  // Memoized function to get available voices - prevents unnecessary recalculations
+  const updateVoices = useCallback(() => {
     if ('speechSynthesis' in window) {
       const availableVoices = window.speechSynthesis.getVoices();
       if (availableVoices.length > 0) {
@@ -34,7 +38,15 @@ const VoiceIntroduction: React.FC = () => {
       }
     }
     return false;
-  };
+  }, []);
+
+  // Show component with animation after a small delay
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     // Check if text-to-speech has already played in this session
@@ -50,17 +62,17 @@ const VoiceIntroduction: React.FC = () => {
         const voicesUpdated = updateVoices();
         
         // If voices are now available and we haven't played yet, try to play
-        if (voicesUpdated && !hasIntroPlayed && !isSpeaking && autoplayAttempts < 3) {
+        if (voicesUpdated && !hasIntroPlayed && !isSpeaking && autoplayAttempts < 2) {
           attemptAutoplay();
         }
       };
       
-      // Try to play automatically after page loads
+      // Try to play automatically after page loads - with reduced attempts
       if (!hasIntroPlayed) {
         // First attempt after a short delay
         autoplayTimerRef.current = setTimeout(() => {
           attemptAutoplay();
-        }, 1500);
+        }, 2000); // Increased delay for better user experience
       } else {
         setHasPlayed(true);
       }
@@ -75,16 +87,16 @@ const VoiceIntroduction: React.FC = () => {
         clearTimeout(autoplayTimerRef.current);
       }
     };
-  }, []);
+  }, [updateVoices]);
   
-  // Effect to handle multiple autoplay attempts
+  // Effect to handle multiple autoplay attempts - reduced to 2 attempts max
   useEffect(() => {
-    if (autoplayAttempts > 0 && autoplayAttempts < 3 && !isSpeaking && !hasPlayed) {
+    if (autoplayAttempts > 0 && autoplayAttempts < 2 && !isSpeaking && !hasPlayed) {
       // If previous attempt failed, try again after a delay
       autoplayTimerRef.current = setTimeout(() => {
         playIntroduction();
       }, 2000);
-    } else if (autoplayAttempts >= 3 && !isSpeaking && !hasPlayed) {
+    } else if (autoplayAttempts >= 2 && !isSpeaking && !hasPlayed) {
       // Mark as failed after multiple attempts
       setAutoplayFailed(true);
     }
@@ -96,13 +108,14 @@ const VoiceIntroduction: React.FC = () => {
     };
   }, [autoplayAttempts, isSpeaking, hasPlayed]);
   
-  const attemptAutoplay = () => {
+  const attemptAutoplay = useCallback(() => {
     // Attempt to play and increment the attempt counter
     playIntroduction();
     setAutoplayAttempts(prev => prev + 1);
-  };
+  }, []);
   
-  const getBestVoice = (): SpeechSynthesisVoice | null => {
+  // Memoized function to get the best voice
+  const getBestVoice = useCallback((): SpeechSynthesisVoice | null => {
     if (voices.length === 0) return null;
     
     // Try to find a friendly, preferably female English voice
@@ -135,15 +148,16 @@ const VoiceIntroduction: React.FC = () => {
     
     // Default to first voice if no English voice is found
     return voices[0];
-  };
+  }, [voices]);
   
-  const playIntroduction = () => {
+  const playIntroduction = useCallback(() => {
     if ('speechSynthesis' in window) {
       try {
         // Stop any current speech
         window.speechSynthesis.cancel();
         
         const speech = new SpeechSynthesisUtterance(welcomeMessage);
+        speechInstance.current = speech;
         
         // Configure voice properties
         speech.rate = 0.9; // Slightly slower than default for clarity
@@ -170,7 +184,7 @@ const VoiceIntroduction: React.FC = () => {
         speech.onerror = () => {
           setIsSpeaking(false);
           // If this was an autoplay attempt, mark as failed after the last attempt
-          if (autoplayAttempts >= 2) {
+          if (autoplayAttempts >= 1) {
             setAutoplayFailed(true);
           }
         };
@@ -185,9 +199,9 @@ const VoiceIntroduction: React.FC = () => {
       // Browser doesn't support speech synthesis
       setAutoplayFailed(true);
     }
-  };
+  }, [autoplayAttempts, getBestVoice]);
   
-  const pauseResumeIntroduction = () => {
+  const pauseResumeIntroduction = useCallback(() => {
     if ('speechSynthesis' in window) {
       if (isPaused) {
         window.speechSynthesis.resume();
@@ -197,20 +211,20 @@ const VoiceIntroduction: React.FC = () => {
         setIsPaused(true);
       }
     }
-  };
+  }, [isPaused]);
   
-  const stopIntroduction = () => {
+  const stopIntroduction = useCallback(() => {
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
       setIsSpeaking(false);
       setIsPaused(false);
     }
-  };
+  }, []);
   
-  const restartIntroduction = () => {
+  const restartIntroduction = useCallback(() => {
     setAutoplayFailed(false);
     playIntroduction();
-  };
+  }, [playIntroduction]);
   
   // If browser doesn't support speech synthesis or intro has played and is not speaking, don't render controls
   if (!('speechSynthesis' in window) || (!isSpeaking && hasPlayed && !autoplayFailed)) {
@@ -218,7 +232,7 @@ const VoiceIntroduction: React.FC = () => {
   }
   
   return (
-    <IntroductionContainer>
+    <IntroductionContainer isVisible={isVisible}>
       {autoplayFailed ? (
         <>
           <IntroTitle>Didn't hear our welcome?</IntroTitle>
@@ -235,7 +249,7 @@ const VoiceIntroduction: React.FC = () => {
             </PlayAgainButton>
           </ControlsWrapper>
         </>
-      ) : (
+      ) :
         <>
           <IntroTitle>Welcome to Restro Travel!</IntroTitle>
           <ControlsWrapper>
@@ -268,7 +282,7 @@ const VoiceIntroduction: React.FC = () => {
             )}
           </ControlsWrapper>
         </>
-      )}
+      }
       <CloseButton onClick={() => {
         stopIntroduction();
         setAutoplayFailed(false);
@@ -282,7 +296,11 @@ const VoiceIntroduction: React.FC = () => {
   );
 };
 
-const IntroductionContainer = styled.div`
+interface IntroductionContainerProps {
+  isVisible: boolean;
+}
+
+const IntroductionContainer = styled.div<IntroductionContainerProps>`
   position: fixed;
   bottom: 20px;
   right: 20px;
@@ -293,12 +311,10 @@ const IntroductionContainer = styled.div`
   box-shadow: ${({ theme }) => theme.boxShadow.lg};
   z-index: ${({ theme }) => theme.zIndex.fixed};
   max-width: 300px;
-  animation: fadeIn 0.5s ease;
-  
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+  opacity: ${({ isVisible }) => (isVisible ? 1 : 0)};
+  transform: translateY(${({ isVisible }) => (isVisible ? 0 : '30px')});
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  will-change: opacity, transform;
 `;
 
 const IntroTitle = styled.h3`
@@ -376,4 +392,4 @@ const CloseIcon = styled.svg`
   fill: currentColor;
 `;
 
-export default VoiceIntroduction; 
+export default memo(VoiceIntroduction); 

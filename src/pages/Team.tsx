@@ -5,13 +5,25 @@ import { Link } from 'react-router-dom';
 import Container from '../components/Container';
 import Button from '../components/Button';
 import { fadeIn, fadeInUp, staggerContainer } from '../animations/transitions';
+import { HeroPlaceholder, AvatarPlaceholder } from '../components/PlaceholderImage';
+import { getPlaceholderCollection } from '../utils/imageUtils';
 
 const Team: React.FC = () => {
+  // Generate placeholder images for team members
+  const teamAvatars = getPlaceholderCollection(6, 400, 500, 'people');
+
   return (
     <PageWrapper>
       {/* Hero Section */}
       <HeroSection>
         <HeroOverlay />
+        <HeroImageContainer>
+          <HeroPlaceholder 
+            category="people" 
+            alt="Restro Travel Team"
+            animate={false}
+          />
+        </HeroImageContainer>
         <Container>
           <HeroContent
             initial="hidden"
@@ -60,7 +72,10 @@ const Team: React.FC = () => {
               variants={staggerContainer}
             >
               <TeamMemberImage variants={fadeIn}>
-                <img src="/src/assets/images/team-member-1.jpg" alt="Sarah Johnson" />
+                <AvatarPlaceholder 
+                  category="people" 
+                  alt="Sarah Johnson"
+                />
               </TeamMemberImage>
               <TeamMemberInfo variants={fadeInUp}>
                 <TeamMemberName>Sarah Johnson</TeamMemberName>
@@ -101,7 +116,10 @@ const Team: React.FC = () => {
                 </TeamMemberSpecialties>
               </TeamMemberInfo>
               <TeamMemberImage variants={fadeIn}>
-                <img src="/src/assets/images/team-member-2.jpg" alt="David Nkosi" />
+                <AvatarPlaceholder 
+                  category="people" 
+                  alt="David Nkosi"
+                />
               </TeamMemberImage>
             </TeamMember>
 
@@ -112,7 +130,10 @@ const Team: React.FC = () => {
               variants={staggerContainer}
             >
               <TeamMemberImage variants={fadeIn}>
-                <img src="/src/assets/images/team-member-3.jpg" alt="Maria Fernandez" />
+                <AvatarPlaceholder 
+                  category="people" 
+                  alt="Maria Fernandez"
+                />
               </TeamMemberImage>
               <TeamMemberInfo variants={fadeInUp}>
                 <TeamMemberName>Maria Fernandez</TeamMemberName>
@@ -153,7 +174,10 @@ const Team: React.FC = () => {
                 </TeamMemberSpecialties>
               </TeamMemberInfo>
               <TeamMemberImage variants={fadeIn}>
-                <img src="/src/assets/images/team-member-4.jpg" alt="James Mbeki" />
+                <AvatarPlaceholder 
+                  category="people" 
+                  alt="James Mbeki"
+                />
               </TeamMemberImage>
             </TeamMember>
 
@@ -164,7 +188,10 @@ const Team: React.FC = () => {
               variants={staggerContainer}
             >
               <TeamMemberImage variants={fadeIn}>
-                <img src="/src/assets/images/team-member-5.jpg" alt="Emma van der Merwe" />
+                <AvatarPlaceholder 
+                  category="people" 
+                  alt="Emma van der Merwe"
+                />
               </TeamMemberImage>
               <TeamMemberInfo variants={fadeInUp}>
                 <TeamMemberName>Emma van der Merwe</TeamMemberName>
@@ -205,7 +232,10 @@ const Team: React.FC = () => {
                 </TeamMemberSpecialties>
               </TeamMemberInfo>
               <TeamMemberImage variants={fadeIn}>
-                <img src="/src/assets/images/team-member-6.jpg" alt="Thomas Wilson" />
+                <AvatarPlaceholder 
+                  category="people" 
+                  alt="Thomas Wilson"
+                />
               </TeamMemberImage>
             </TeamMember>
           </TeamGrid>
@@ -346,28 +376,38 @@ const Team: React.FC = () => {
 
 // Styled Components
 const PageWrapper = styled.div`
-  overflow-x: hidden;
+  width: 100%;
 `;
 
 const HeroSection = styled.section`
+  width: 100%;
   height: 60vh;
   min-height: 400px;
-  background-image: url('/src/assets/images/team-hero.jpg');
-  background-size: cover;
-  background-position: center;
   position: relative;
   display: flex;
   align-items: center;
-  color: ${({ theme }) => theme.colors.white};
+  color: ${props => props.theme.colors.white};
+  margin-bottom: 4rem;
+  overflow: hidden;
+`;
+
+const HeroImageContainer = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
 `;
 
 const HeroOverlay = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(to right, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.4));
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7));
+  z-index: -1;
 `;
 
 const HeroContent = styled(motion.div)`
@@ -458,7 +498,6 @@ const TeamMember = styled(motion.div)`
     @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
       direction: rtl;
       
-      ${/* This ensures text alignment isn't affected by the rtl direction */ ""}
       * {
         direction: ltr;
       }

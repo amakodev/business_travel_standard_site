@@ -64,19 +64,25 @@ A modern travel website for a South African travel agency specializing in Cape T
 - Styled with styled-components
 - React Router for navigation
 - Voice introduction for first-time visitors
+- African-themed placeholder images
 
-## Placeholder Images
+## African-Themed Placeholder Images
 
-The website uses placeholder images from external services to demonstrate the layout and design. In a production environment, these would be replaced with actual images.
+The website uses carefully selected African-themed placeholder images to showcase the beauty of South Africa and provide an authentic travel experience. In a production environment, these would be replaced with actual images from the travel destinations.
 
 ### Image Utilities
 
 The project includes a comprehensive set of image utilities in `src/utils/imageUtils.ts`:
 
-- `getPlaceholderImage()`: Generates placeholder images using Picsum Photos
+- `getPlaceholderImage()`: Generates African-themed placeholder images using curated Picsum Photos IDs
 - `getTextPlaceholder()`: Creates text-based placeholders with customizable colors
-- `getTravelPlaceholder()`: Specialized function for travel-themed images
-- `getPlaceholderCollection()`: Generates multiple placeholder images at once
+- `getAfricanTravelPlaceholder()`: Specialized function for African travel-themed images with categories:
+  - Safari/Wildlife
+  - Beaches/Coastal
+  - Mountains/Landscapes
+  - Cities/Architecture
+  - Winelands
+- `getPlaceholderCollection()`: Generates multiple African-themed placeholder images at once
 
 ### Placeholder Components
 
@@ -88,18 +94,32 @@ The `src/components/PlaceholderImage.tsx` file provides reusable components:
 - `AvatarPlaceholder`: For profile/avatar images (150x150)
 - `GalleryPlaceholder`: For gallery displays (600x400)
 
+### African Image Gallery
+
+The `src/components/AfricanImageGallery.tsx` component provides specialized galleries:
+
+- `AfricanImageGallery`: Base gallery component with interactive or grid layouts
+- `SafariGallery`: Pre-configured gallery for safari/wildlife images
+- `CapeTownGallery`: Pre-configured gallery for Cape Town city images
+- `WinelandsGallery`: Pre-configured gallery for Cape Winelands images
+
 ### Usage Example
 
 ```jsx
 // Import the components
 import { CardPlaceholder, HeroPlaceholder } from '../components/PlaceholderImage';
-import { getPlaceholderCollection } from '../utils/imageUtils';
+import { getPlaceholderCollection, getAfricanTravelPlaceholder } from '../utils/imageUtils';
+import { SafariGallery, CapeTownGallery } from '../components/AfricanImageGallery';
 
-// Generate a collection of images
-const destinationImages = getPlaceholderCollection(3, 600, 400, 'nature');
+// Generate a collection of African-themed images
+const safariImages = getPlaceholderCollection(3, 600, 400);
+
+// Use specific African travel categories
+const winelands = getAfricanTravelPlaceholder(800, 600, 'winelands');
+const beachImage = getAfricanTravelPlaceholder(800, 600, 'beach');
 
 // Use in your component
-<HeroPlaceholder category="travel" alt="Beautiful landscape" />
+<HeroPlaceholder category="safari" alt="African safari experience" />
 
 <CardPlaceholder 
   category="city" 
@@ -107,6 +127,17 @@ const destinationImages = getPlaceholderCollection(3, 600, 400, 'nature');
   useTextOverlay={true}
   bgColor="#1976D2"
   alt="Cape Town"
+/>
+
+// Add a pre-configured gallery
+<SafariGallery imageCount={4} />
+
+// Or a custom gallery
+<AfricanImageGallery 
+  title="Explore South Africa" 
+  category="beach"
+  imageCount={6}
+  interactive={true}
 />
 ```
 

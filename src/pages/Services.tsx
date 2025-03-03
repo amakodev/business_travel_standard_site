@@ -5,13 +5,25 @@ import { Link } from 'react-router-dom';
 import Container from '../components/Container';
 import Button from '../components/Button';
 import { fadeIn, fadeInUp, staggerContainer } from '../animations/transitions';
+import { HeroPlaceholder, CardPlaceholder, GalleryPlaceholder } from '../components/PlaceholderImage';
+import { getPlaceholderCollection } from '../utils/imageUtils';
 
 const Services: React.FC = () => {
+  // Generate placeholder images for services
+  const serviceImages = getPlaceholderCollection(5, 600, 400, 'travel');
+
   return (
     <PageWrapper>
       {/* Hero Section */}
       <HeroSection>
         <HeroOverlay />
+        <HeroImageContainer>
+          <HeroPlaceholder 
+            category="travel" 
+            alt="Premium Travel Services"
+            animate={false}
+          />
+        </HeroImageContainer>
         <Container>
           <HeroContent
             initial="hidden"
@@ -45,7 +57,10 @@ const Services: React.FC = () => {
                 variants={staggerContainer}
               >
                 <ServiceImage variants={fadeIn}>
-                  <img src="/src/assets/images/service-flights.jpg" alt="Flight Booking Services" />
+                  <CardPlaceholder 
+                    category="travel" 
+                    alt="Flight Booking Services"
+                  />
                 </ServiceImage>
                 <ServiceInfo variants={fadeInUp}>
                   <ServiceTitle>Flight Booking</ServiceTitle>
@@ -108,7 +123,10 @@ const Services: React.FC = () => {
                   <Button as={Link} to="/contact" variant="primary">Inquire Now</Button>
                 </ServiceInfo>
                 <ServiceImage variants={fadeIn}>
-                  <img src="/src/assets/images/service-accommodation.jpg" alt="Luxury Accommodation" />
+                  <CardPlaceholder 
+                    category="architecture" 
+                    alt="Luxury Accommodation"
+                  />
                 </ServiceImage>
               </ServiceItem>
 
@@ -119,7 +137,10 @@ const Services: React.FC = () => {
                 variants={staggerContainer}
               >
                 <ServiceImage variants={fadeIn}>
-                  <img src="/src/assets/images/service-tours.jpg" alt="Guided Tours" />
+                  <CardPlaceholder 
+                    category="nature" 
+                    alt="Guided Tours"
+                  />
                 </ServiceImage>
                 <ServiceInfo variants={fadeInUp}>
                   <ServiceTitle>Guided Tours</ServiceTitle>
@@ -182,7 +203,10 @@ const Services: React.FC = () => {
                   <Button as={Link} to="/contact" variant="primary">Inquire Now</Button>
                 </ServiceInfo>
                 <ServiceImage variants={fadeIn}>
-                  <img src="/src/assets/images/service-transportation.jpg" alt="Transportation Services" />
+                  <CardPlaceholder 
+                    category="city" 
+                    alt="Transportation Services"
+                  />
                 </ServiceImage>
               </ServiceItem>
 
@@ -193,7 +217,10 @@ const Services: React.FC = () => {
                 variants={staggerContainer}
               >
                 <ServiceImage variants={fadeIn}>
-                  <img src="/src/assets/images/service-packages.jpg" alt="Custom Travel Packages" />
+                  <CardPlaceholder 
+                    category="safari" 
+                    alt="Custom Travel Packages"
+                  />
                 </ServiceImage>
                 <ServiceInfo variants={fadeInUp}>
                   <ServiceTitle>Custom Travel Packages</ServiceTitle>
@@ -261,28 +288,38 @@ const Services: React.FC = () => {
 
 // Styled Components
 const PageWrapper = styled.div`
-  overflow-x: hidden;
+  width: 100%;
 `;
 
 const HeroSection = styled.section`
+  width: 100%;
   height: 60vh;
   min-height: 400px;
-  background-image: url('/src/assets/images/services-hero.jpg');
-  background-size: cover;
-  background-position: center;
   position: relative;
   display: flex;
   align-items: center;
-  color: ${({ theme }) => theme.colors.white};
+  color: ${props => props.theme.colors.white};
+  margin-bottom: 4rem;
+  overflow: hidden;
+`;
+
+const HeroImageContainer = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
 `;
 
 const HeroOverlay = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(to right, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.4));
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7));
+  z-index: -1;
 `;
 
 const HeroContent = styled(motion.div)`

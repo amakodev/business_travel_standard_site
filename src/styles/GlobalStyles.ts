@@ -137,6 +137,33 @@ const GlobalStyles = createGlobalStyle<GlobalStylesProps>`
     padding-top: ${({ theme }) => theme.spacing.xl} !important;
   }
 
+  /* Page Loader Styles */
+  .page-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: ${({ theme }) => theme.colors.white};
+    z-index: ${({ theme }) => theme.zIndex.modal};
+  }
+
+  .loader-spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top-color: ${({ theme }) => theme.colors.primary};
+    animation: spin 1s ease-in-out infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
   /* Animations */
   @keyframes fadeIn {
     from {
@@ -174,6 +201,18 @@ const GlobalStyles = createGlobalStyle<GlobalStylesProps>`
     &.barba-enter {
       opacity: 0;
     }
+  }
+
+  /* Image Optimizations */
+  img {
+    will-change: transform;
+    transform: translateZ(0);
+  }
+
+  /* Improved scrolling */
+  * {
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
   }
 `;
 

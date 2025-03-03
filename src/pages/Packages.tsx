@@ -7,6 +7,7 @@ import Button from '../components/Button';
 import { fadeIn, fadeInUp, staggerContainer } from '../animations/transitions';
 import { HeroPlaceholder, CardPlaceholder, GalleryPlaceholder } from '../components/PlaceholderImage';
 import { getPlaceholderCollection } from '../utils/imageUtils';
+import { SafariGallery, CapeTownGallery } from '../components/AfricanImageGallery';
 
 const Packages: React.FC = () => {
   // Generate placeholder images for different package types
@@ -153,6 +154,42 @@ const Packages: React.FC = () => {
         </Container>
       </FeaturedPackagesSection>
 
+      {/* Safari Gallery Section */}
+      <GallerySection>
+        <Container>
+          <SectionContent
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+          >
+            <motion.div variants={fadeInUp}>
+              <SectionTitle>Safari Experiences</SectionTitle>
+            </motion.div>
+            <motion.div variants={fadeInUp}>
+              <SectionSubheading>Encounter Africa's Majestic Wildlife</SectionSubheading>
+            </motion.div>
+            
+            <SafariGallery 
+              imageCount={4} 
+              interactive={true}
+              captions={[
+                "Witness the majesty of African elephants in their natural habitat",
+                "Experience thrilling game drives with expert local guides",
+                "Observe the iconic Big Five on safari adventures",
+                "Stay in luxury lodges surrounded by pristine wilderness"
+              ]}
+            />
+            
+            <GalleryButtonWrapper variants={fadeInUp}>
+              <Button as={Link} to="/packages/safari" variant="primary">
+                View Safari Packages
+              </Button>
+            </GalleryButtonWrapper>
+          </SectionContent>
+        </Container>
+      </GallerySection>
+
       {/* Special Deals Section */}
       <SpecialDealsSection>
         <Container>
@@ -214,6 +251,44 @@ const Packages: React.FC = () => {
           </SectionContent>
         </Container>
       </SpecialDealsSection>
+
+      {/* Cape Town Gallery Section */}
+      <GallerySection>
+        <Container>
+          <SectionContent
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+          >
+            <motion.div variants={fadeInUp}>
+              <SectionTitle>Cape Town Highlights</SectionTitle>
+            </motion.div>
+            <motion.div variants={fadeInUp}>
+              <SectionSubheading>Explore the Mother City's Iconic Attractions</SectionSubheading>
+            </motion.div>
+            
+            <CapeTownGallery 
+              imageCount={6} 
+              interactive={false}
+              captions={[
+                "Table Mountain offers breathtaking views of Cape Town",
+                "Visit the historic Robben Island, where Nelson Mandela was imprisoned",
+                "Explore the vibrant V&A Waterfront with shops and restaurants",
+                "Discover the colorful Bo-Kaap neighborhood",
+                "Relax on the beautiful beaches of Camps Bay",
+                "Take a scenic drive along Chapman's Peak"
+              ]}
+            />
+            
+            <GalleryButtonWrapper variants={fadeInUp}>
+              <Button as={Link} to="/packages/cape-town" variant="primary">
+                View Cape Town Packages
+              </Button>
+            </GalleryButtonWrapper>
+          </SectionContent>
+        </Container>
+      </GallerySection>
 
       {/* Package Benefits Section */}
       <BenefitsSection>
@@ -701,6 +776,16 @@ const CTAButtonGroup = styled(motion.div)`
   @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
     flex-direction: row;
   }
+`;
+
+const GallerySection = styled.section`
+  padding: ${({ theme }) => `${theme.spacing['2xl']} 0`};
+  background-color: ${({ theme }) => theme.colors.lightGray};
+`;
+
+const GalleryButtonWrapper = styled(motion.div)`
+  margin-top: ${({ theme }) => theme.spacing.xl};
+  text-align: center;
 `;
 
 export default Packages; 
