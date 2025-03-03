@@ -368,13 +368,11 @@ const PageWrapper = styled.div`
 const HeroSection = styled.section`
   height: 100vh;
   min-height: 600px;
-  background-image: url('/src/assets/images/cape-town-aerial.jpg');
-  background-size: cover;
-  background-position: center;
   position: relative;
   display: flex;
   align-items: center;
   color: ${({ theme }) => theme.colors.white};
+  overflow: hidden;
 `;
 
 const HeroOverlay = styled.div`
@@ -398,6 +396,7 @@ const HeroImageContainer = styled.div`
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
   }
 `;
 

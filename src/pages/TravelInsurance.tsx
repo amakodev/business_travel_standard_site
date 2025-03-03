@@ -283,13 +283,11 @@ const PageWrapper = styled.div`
 const HeroSection = styled.section`
   height: 60vh;
   min-height: 400px;
-  background-image: url('/src/assets/images/travel-insurance-hero.jpg');
-  background-size: cover;
-  background-position: center;
   position: relative;
   display: flex;
   align-items: center;
   color: ${({ theme }) => theme.colors.white};
+  overflow: hidden;
 `;
 
 const HeroOverlay = styled.div`

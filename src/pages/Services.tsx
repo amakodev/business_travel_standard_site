@@ -310,6 +310,13 @@ const HeroImageContainer = styled.div`
   width: 100%;
   height: 100%;
   z-index: -2;
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
 `;
 
 const HeroOverlay = styled.div`

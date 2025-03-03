@@ -78,6 +78,8 @@ const PlaceholderImage: React.FC<PlaceholderImageProps> = ({
 // Styled components for the image container and image
 const ImageContainer = styled.div<{ $rounded?: boolean; $shadow?: boolean }>`
   overflow: hidden;
+  width: 100%;
+  height: 100%;
   border-radius: ${({ $rounded, theme }) => $rounded ? theme.borderRadius.lg : '0'};
   box-shadow: ${({ $shadow, theme }) => $shadow ? theme.boxShadow.md : 'none'};
 `;
@@ -85,8 +87,9 @@ const ImageContainer = styled.div<{ $rounded?: boolean; $shadow?: boolean }>`
 const StyledImage = styled.img<{ $rounded?: boolean }>`
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
   object-fit: cover;
+  object-position: center;
   border-radius: ${({ $rounded, theme }) => $rounded ? theme.borderRadius.lg : '0'};
 `;
 
